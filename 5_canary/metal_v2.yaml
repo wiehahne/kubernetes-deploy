@@ -21,7 +21,7 @@ spec:
             - containerPort: 9080
           env:
             - name: "HW_RESPONSE"
-              value: "[\"Chicago, Illinois\",\"Denali, Alaska\"]"
+              value: "[\"Chicago\",\"Amsterdam\"]"
 
 ---
 apiVersion: v1
