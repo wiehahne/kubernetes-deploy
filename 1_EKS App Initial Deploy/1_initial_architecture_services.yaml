@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: travel
+  labels:
+    app: travel
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: travel
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: summer-v1
+  labels:
+    app: summer
+    version: v1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: summer
+    version: v1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: winter-v1
+  labels:
+    app: winter
+    version: v1
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: winter
+    version: v1
