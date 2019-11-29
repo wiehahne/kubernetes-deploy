@@ -1,0 +1,20 @@
+apiVersion: appmesh.k8s.aws/v1beta1
+kind: VirtualService
+metadata:
+  name: winter.prod.svc.cluster.local
+  namespace: prod
+spec:
+  meshName: travel-app
+  virtualRouter:
+    name: winter-router
+  routes:
+    - name: winter-route
+      http:
+        match:
+          prefix: /
+        action:
+          weightedTargets:
+            - virtualNodeName: winter-v1
+              weight: 50
+            - virtualNodeName: winter-v2
+              weight: 50
