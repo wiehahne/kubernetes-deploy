@@ -1,0 +1,13 @@
+kubectl apply -nprod -f 1_initial_architecture_deployment_travelapp.yaml
+kubectl apply -nprod -f 1_initial_architecture_services_travelapp.yaml
+
+Get travel app pod name:
+kubectl get pods -nprod -l app=travel
+
+Exec to travel app:
+kubectl exec -nprod -it travel-c958bb7d5-z24vh bash
+
+Curl Summer / Winter apps:
+curl summer-v1.prod.svc.cluster.local:9080;echo
+curl winter-v1.prod.svc.cluster.local:9080;echo
+
