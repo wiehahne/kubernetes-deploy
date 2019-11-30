@@ -11,7 +11,7 @@ spec:
         app: "2048"
     spec:
       containers:
-      - image: wiehahne/dockerhubrepo/docker-2048
+      - image: wiehahne/dockerhubrepo
         imagePullPolicy: Always
         name: "2048"
         ports:
