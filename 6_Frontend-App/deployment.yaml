@@ -4,7 +4,7 @@ metadata:
   name: travel-frontend
   labels:
     app: travel-frontend
-  namespace: default
+  namespace: prod
 spec:
   replicas: 1
   selector:
