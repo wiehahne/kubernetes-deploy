@@ -1,18 +1,13 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   name: "travel-frontend"
   namespace: "prod"
 spec:
-  replicas: 5
-  template:
-    metadata:
-      labels:
-        app: "travel-frontend"
-    spec:
-      containers:
-      - image: nginxdemos/hello
-        imagePullPolicy: Always
-        name: "travel-frontend"
-        ports:
-        - containerPort: 80
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: "travel-frontend"
