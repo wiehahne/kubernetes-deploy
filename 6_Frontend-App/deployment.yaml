@@ -13,6 +13,6 @@ spec:
       containers:
       - image: wiehahne/dockerhubrepo
         imagePullPolicy: Always
-        name: "travel-frontend"
+        name: "2048"
         ports:
         - containerPort: 80
