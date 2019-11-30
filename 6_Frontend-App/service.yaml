@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "travel-frontend"
+  name: "service-2048"
   namespace: "prod"
 spec:
   ports:
@@ -10,4 +10,4 @@ spec:
       protocol: TCP
   type: NodePort
   selector:
-    app: "travel-frontend"
+    app: "2048"

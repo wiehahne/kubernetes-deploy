@@ -1,17 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "travel-frontend"
+  name: "2048-deployment"
   namespace: "prod"
 spec:
   replicas: 5
   template:
     metadata:
       labels:
-        app: "travel-frontend"
+        app: "2048"
     spec:
       containers:
-      - image: wiehahne/dockerhubrepo
+      - image: alexwhen/docker-2048
         imagePullPolicy: Always
         name: "2048"
         ports:
