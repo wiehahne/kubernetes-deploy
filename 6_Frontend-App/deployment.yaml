@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: travel-frontend
+  labels:
+    app: travel-frontend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: travel-frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: travel-frontend
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: lifecycle
+                operator: In
+                values:
+                - Ec2Spot
+      tolerations:
+      - key: "spotInstance"
+        operator: "Equal"
+        value: "true"
+        effect: "PreferNoSchedule"
+    spec:
+      containers:
+      - image: nginxdemos/hello
+        imagePullPolicy: Always
+        name: travel-frontend
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: SUMMER_URL
+          value: "http://curl summer.prod.svc.cluster.local:9080"
+        - name: NODEJS_URL
+          value: "http://curl winter.prod.svc.cluster.local:9080"

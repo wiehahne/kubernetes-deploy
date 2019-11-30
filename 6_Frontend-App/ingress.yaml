@@ -1,0 +1,8 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: travel-frontend
+spec:
+  backend:
+    serviceName: travel-frontend
+    servicePort: 80
