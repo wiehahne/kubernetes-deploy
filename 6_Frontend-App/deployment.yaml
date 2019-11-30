@@ -11,7 +11,7 @@ spec:
         app: "travel-frontend"
     spec:
       containers:
-      - image: nginxdemos/hello
+      - image: wiehahne/dockerhubrepo
         imagePullPolicy: Always
         name: "travel-frontend"
         ports:
