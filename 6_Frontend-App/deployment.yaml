@@ -1,34 +1,18 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: travel-frontend
-  labels:
-    app: travel-frontend
-  namespace: prod
+  name: "travel-frontend"
+  namespace: "prod"
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: travel-frontend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  replicas: 5
   template:
     metadata:
       labels:
-        app: travel-frontend
+        app: "travel-frontend"
     spec:
       containers:
       - image: nginxdemos/hello
         imagePullPolicy: Always
-        name: travel-frontend
+        name: "travel-frontend"
         ports:
-        - containerPort: 3000
-          protocol: TCP
-        env:
-        - name: SUMMER_URL
-          value: "http://curl summer.prod.svc.cluster.local:9080"
-        - name: NODEJS_URL
-          value: "http://curl winter.prod.svc.cluster.local:9080"
+        - containerPort: 80

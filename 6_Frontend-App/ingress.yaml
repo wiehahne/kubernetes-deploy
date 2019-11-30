@@ -1,8 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: travel-frontend
+  name: "travel-frontend-ingress"
+  namespace: "prod"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+  labels:
+    app: travel-frontend
 spec:
-  backend:
-    serviceName: travel-frontend
-    servicePort: 80
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: "service-travel-frontend"
+              servicePort: 80
