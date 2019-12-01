@@ -5,9 +5,148 @@ Get travel app pod name:
 kubectl get pods -nprod -l app=travel
 
 Exec to travel app:
-kubectl exec -nprod -it travel-c958bb7d5-z24vh bash
+kubectl exec -nprod -it 2048-deployment-7cfbb79f6c-7wrn8 bash
 
 Curl Summer / Winter apps:
 curl summer-v1.prod.svc.cluster.local:9080;echo
 curl winter-v1.prod.svc.cluster.local:9080;echo
 
+!!!
+PATCH PODS FORCING RECREATION:
+kubectl patch deployment dj -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+kubectl patch deployment metal-v1 -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+kubectl patch deployment jazz-v1 -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+!!!
+
+
+
+---
+Working notes:
+
+kubectl apply -f mesh-definition.yaml
+kubectl apply -f virtual-node-definition.yaml
+kubectl apply -f virtual-service-definition.yaml
+kubectl apply -f controller-deployment.yaml
+kubectl create -f nodes_representing_virtual_services.yaml
+
+
+kubectl create -nprod -f nodes_representing_physical_services.yaml
+
+kubectl apply -nprod -f virtual-services.yaml
+
+Service Cluster IPs:
+Admin:~/environment/travelapp/MB3/4_EKS App Create Initial Mesh Components (master) $ kubectl get svc -nprod
+NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+summer-v1   ClusterIP   10.100.169.2     <none>        9080/TCP   47m
+travel      ClusterIP   10.100.115.232   <none>        9080/TCP   47m
+winter-v1   ClusterIP   10.100.217.51    <none>        9080/TCP   47m
+
+Admin:~/environment/travelapp/MB3/4_EKS App Create Initial Mesh Components (master) $ kubectl get svc -nprod
+NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+summer      ClusterIP   10.100.49.207    <none>        9080/TCP   19s
+summer-v1   ClusterIP   10.100.169.2     <none>        9080/TCP   48m
+travel      ClusterIP   10.100.115.232   <none>        9080/TCP   48m
+winter      ClusterIP   10.100.143.136   <none>        9080/TCP   19s
+winter-v1   ClusterIP   10.100.217.51    <none>        9080/TCP   48m
+
+
+
+kubectl describe pods/summer-v1-5c4d85c578-sns69 -nprod
+
+GET CURRENT YAML CONFIG FOR DEPLOYMENT:
+kubectl get deploy -n prod travel -o yaml --export
+
+
+
+kubectl patch deployment travel -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+kubectl patch deployment summer-v1 -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+kubectl patch deployment winter-v1 -nprod -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
+
+Wathc deployment update take place:
+kubectl get pods -nprod --watch
+
+
+
+
+
+
+
+summer      ClusterIP   10.100.49.207    <none>        9080/TCP   47m
+summer-v1   ClusterIP   10.100.169.2     <none>        9080/TCP   95m
+travel      ClusterIP   10.100.115.232   <none>        9080/TCP   95m
+winter      ClusterIP   10.100.143.136   <none>        9080/TCP   47m
+winter-v1   ClusterIP   10.100.217.51    <none>        9080/TCP   95m
+
+
+
+
+
+
+
+
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-service.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-ingress.yaml
+
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-namespace.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-deployment.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-service.yaml
+kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.0.0/docs/examples/2048/2048-ingress.yaml
+
+
+kubectl delete -nprod -f deployment.yaml
+kubectl delete -nprod -f service.yaml
+kubectl delete -nprod -f ingress.yaml
+
+kubectl apply -nprod -f deployment.yaml
+kubectl apply -nprod -f service.yaml
+kubectl apply -nprod -f ingress.yaml
+
+
+
+
+
+
+
+Admin:~/environment/travelapp/MB3/6_Frontend-App (master) $ kubectl get pods -o wide -nprod
+NAME                               READY   STATUS    RESTARTS   AGE     IP               NODE                                           NOMINATED NODE   READINESS GATES
+2048-deployment-857f497c54-gnnwz   2/2     Running   0          4m19s   192.168.56.38    ip-192-168-45-166.us-west-2.compute.internal   <none>           <none>
+2048-deployment-857f497c54-kjw4j   2/2     Running   0          4m19s   192.168.7.60     ip-192-168-31-166.us-west-2.compute.internal   <none>           <none>
+2048-deployment-857f497c54-m4bgq   2/2     Running   0          4m19s   192.168.81.215   ip-192-168-79-148.us-west-2.compute.internal   <none>           <none>
+2048-deployment-857f497c54-t8rcv   2/2     Running   0          4m19s   192.168.15.40    ip-192-168-5-123.us-west-2.compute.internal    <none>           <none>
+2048-deployment-857f497c54-zdmf4   2/2     Running   0          4m19s   192.168.45.14    ip-192-168-45-166.us-west-2.compute.internal   <none>           <none>
+summer-v1-784d8b4849-9zmn6         2/2     Running   0          20h     192.168.25.30    ip-192-168-31-166.us-west-2.compute.internal   <none>           <none>
+summer-v2-5c9d8958f-gnd2l          2/2     Running   0          20h     192.168.20.150   ip-192-168-31-166.us-west-2.compute.internal   <none>           <none>
+travel-55d9df6497-mzmq2            2/2     Running   0          20h     192.168.84.101   ip-192-168-79-148.us-west-2.compute.internal   <none>           <none>
+winter-v1-5558b8865f-jhqxx         2/2     Running   0          20h     192.168.75.246   ip-192-168-79-148.us-west-2.compute.internal   <none>           <none>
+winter-v2-847bc8cdcf-mf8l9         2/2     Running   0          20h     192.168.18.8     ip-192-168-31-166.us-west-2.compute.internal   <none>           <none>
+
+
+
+
+---------
+
+
+
+
+Bash:
+
+summer = curl summer-v1.prod.svc.cluster.local:9080
+winter = curl winter-v1.prod.svc.cluster.local:9080
+
+
+
+
+
+
+
+
+
+
+
+
+demoapp-frontend.discoveringthecloud.com
+demoapp-app1.discoveringthecloud.com
+demoapp-app12.discoveringthecloud.com
