@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: summer-v1
+  name: summer
   labels:
     app: summer
     version: v1
@@ -30,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: winter-v1
+  name: winter
   labels:
     app: winter
     version: v1
