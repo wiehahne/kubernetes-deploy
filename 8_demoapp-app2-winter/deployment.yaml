@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "demoapp-app2-winter"
+  namespace: "prod"
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: "demoapp-app2-winter"
+    spec:
+      containers:
+      - image: wiehahne/demoapp-app2-winter
+        imagePullPolicy: Always
+        name: "demoapp-app2-winter"
+        ports:
+        - containerPort: 80

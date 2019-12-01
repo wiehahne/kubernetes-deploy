@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "2048-deployment"
+  name: "demoapp-app1-summer"
   namespace: "prod"
 spec:
   replicas: 5
   template:
     metadata:
       labels:
-        app: "2048"
+        app: "demoapp-app1-summer"
     spec:
       containers:
-      - image: wiehahne/dockerhubrepo
+      - image: wiehahne/demoapp-app1-summer
         imagePullPolicy: Always
-        name: "2048"
+        name: "demoapp-app1-summer"
         ports:
         - containerPort: 80

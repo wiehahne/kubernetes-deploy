@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "demoapp-frontend"
+  namespace: "prod"
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: "demoapp-frontend"
+    spec:
+      containers:
+      - image: wiehahne/demoapp-frontend
+        imagePullPolicy: Always
+        name: "demoapp-frontend"
+        ports:
+        - containerPort: 80
