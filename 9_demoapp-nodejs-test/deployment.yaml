@@ -11,7 +11,7 @@ spec:
         app: "demoapp-nodejs"
     spec:
       containers:
-      - image: wiehahne/demoapp-nodejs
+      - image: wiehahne/demoapp-nodejs-test
         imagePullPolicy: Always
         name: "demoapp-nodejs"
         ports:
