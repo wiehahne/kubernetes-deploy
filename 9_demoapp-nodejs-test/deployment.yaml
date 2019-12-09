@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "demoapp-nodejs-test"
+  namespace: "prod"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: "demoapp-nodejs-test"
+    spec:
+      containers:
+      - image: wiehahne/demoapp-nodejs-test
+        imagePullPolicy: Always
+        name: "demoapp-nodejs-test"
+        ports:
+        - containerPort: 80
