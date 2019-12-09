@@ -15,5 +15,4 @@ spec:
         imagePullPolicy: Always
         name: "demoapp-nodejs"
         ports:
-        - containerPort: 80
-        
+        - containerPort: 5000

@@ -15,4 +15,4 @@ spec:
           - path: /*
             backend:
               serviceName: "demoapp-nodejs"
-              servicePort: 80
+              servicePort: 5000
