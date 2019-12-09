@@ -11,7 +11,7 @@ spec:
         app: "demoapp-app2-winter"
     spec:
       containers:
-      - image: wiehahne/demoapp-app2-winter
+      - image: wiehahne/demoapp-app2
         imagePullPolicy: Always
         name: "demoapp-app2-winter"
         ports:

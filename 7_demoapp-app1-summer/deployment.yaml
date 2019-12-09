@@ -11,7 +11,7 @@ spec:
         app: "demoapp-app1-summer"
     spec:
       containers:
-      - image: wiehahne/demoapp-app1-summer
+      - image: wiehahne/demoapp-app1
         imagePullPolicy: Always
         name: "demoapp-app1-summer"
         ports:
