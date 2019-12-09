@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "demoapp-nodejs-test"
+  name: "demoapp-nodejs"
   namespace: "prod"
 spec:
   ports:
@@ -10,4 +10,5 @@ spec:
       protocol: TCP
   type: NodePort
   selector:
-    app: "demoapp-nodejs-test"
+    app: "demoapp-nodejs"
+    

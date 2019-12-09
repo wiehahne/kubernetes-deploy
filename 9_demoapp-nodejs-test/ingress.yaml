@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: "demoapp-nodejs-test"
+  name: "demoapp-nodejs"
   namespace: "prod"
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
   labels:
-    app: demoapp-nodejs-test
+    app: demoapp-nodejs
 spec:
   rules:
     - http:
         paths:
           - path: /*
             backend:
-              serviceName: "demoapp-nodejs-test"
+              serviceName: "demoapp-nodejs"
               servicePort: 80
