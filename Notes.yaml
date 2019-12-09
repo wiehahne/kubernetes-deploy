@@ -149,6 +149,6 @@ winter = curl winter-v1.prod.svc.cluster.local:9080
 
 demoapp-frontend.discoveringthecloud.com
 demoapp-app1.discoveringthecloud.com
-demoapp-app12.discoveringthecloud.com
+demoapp-app2.discoveringthecloud.com
 
 480 x 300 image size
