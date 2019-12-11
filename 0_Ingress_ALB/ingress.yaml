@@ -12,10 +12,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /
-            backend:
-              serviceName: "demoapp-frontend"
-              servicePort: 80
           - path: /summer
             backend:
               serviceName: "demoapp-app1-summer"
@@ -31,4 +27,12 @@ spec:
           - path: /winter/*
             backend:
               serviceName: "demoapp-app2-winter"
+              servicePort: 80
+          - path: /
+            backend:
+              serviceName: "demoapp-frontend"
+              servicePort: 80
+          - path: /*
+            backend:
+              serviceName: "demoapp-frontend"
               servicePort: 80
