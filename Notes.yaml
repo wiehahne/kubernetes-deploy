@@ -5,10 +5,10 @@ Get travel app pod name:
 kubectl get pods -nprod -l app=travel
 
 Exec to travel app:
-kubectl exec -nprod -it 2048-deployment-7cfbb79f6c-7wrn8 bash
+kubectl exec -nprod -it demoapp-frontend-688d85cff-78rxk bash
 
 Curl Summer / Winter apps:
-curl summer-v1.prod.svc.cluster.local:9080;echo
+curl demoapp-app1-summer.svc.cluster.local:9080;echo
 curl winter-v1.prod.svc.cluster.local:9080;echo
 
 !!!
@@ -104,6 +104,11 @@ kubectl apply -nprod -f deployment.yaml
 kubectl apply -nprod -f service.yaml
 kubectl apply -nprod -f ingress.yaml
 
+
+
+
+kubectl delete -nprod -f deployment.yaml
+kubectl apply -nprod -f deployment.yaml
 
 
 
