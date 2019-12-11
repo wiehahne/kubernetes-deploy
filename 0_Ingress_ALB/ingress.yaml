@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "demoapp"
+  namespace: "prod"
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+  labels:
+    app: demoapp
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "demoapp-frontend"
+              servicePort: 80
+          - path: /summer/*
+            backend:
+              serviceName: "demoapp-app1-summer"
+              servicePort: 80
+          - path: /winter/*
+            backend:
+              serviceName: "demoapp-app2-winter"
+              servicePort: 80
