@@ -36,7 +36,6 @@ subjects:
 ---
 apiVersion: extensions/v1beta1
 kind: DaemonSet
-namespace: prod
 metadata:
   name: xray-daemon
 spec:
