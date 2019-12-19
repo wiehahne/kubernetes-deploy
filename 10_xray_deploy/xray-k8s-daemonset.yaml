@@ -72,7 +72,6 @@ spec:
 # Configuration for AWS X-Ray daemon
 apiVersion: v1
 kind: ConfigMap
-namespace: prod
 metadata:
   name: xray-config
 data:
