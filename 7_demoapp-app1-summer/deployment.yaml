@@ -15,7 +15,7 @@ spec:
         imagePullPolicy: Always
         name: "demoapp-app1-summer"
         env:
-          - name: AWS_XRAY_DAEMON_ADDRESS 
+          - name: AWS_XRAY_DAEMON_ADDRESS
             value: xray-service
         ports:
         - containerPort: 80
