@@ -11,7 +11,7 @@ spec:
         app: "demoapp-frontend"
     spec:
       containers:
-      - image: 841726648246.dkr.ecr.us-west-2.amazonaws.com/demoapp-frontend:latest
+      - image: wiehahne/demoapp-frontend
         imagePullPolicy: Always
         name: "demoapp-frontend"
         ports:
