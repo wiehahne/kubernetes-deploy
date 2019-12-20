@@ -14,5 +14,8 @@ spec:
       - image: wiehahne/demoapp-app1
         imagePullPolicy: Always
         name: "demoapp-app1-summer"
+        env:
+          - name: AWS_XRAY_DAEMON_ADDRESS 
+            value: xray-service
         ports:
         - containerPort: 80
