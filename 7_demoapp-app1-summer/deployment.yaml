@@ -16,3 +16,6 @@ spec:
         name: "demoapp-app1-summer"
         ports:
         - containerPort: 80
+        env:
+        - name: AWS_XRAY_DAEMON_ADDRESS 
+          value: xray-service
