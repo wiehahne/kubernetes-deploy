@@ -12,6 +12,9 @@ spec:
     spec:
       containers:
       - image: wiehahne/demoapp-frontend
+        env:
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: xray-service
         imagePullPolicy: Always
         name: "demoapp-frontend"
         ports:
