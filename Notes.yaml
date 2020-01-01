@@ -157,3 +157,56 @@ demoapp-app1.discoveringthecloud.com
 demoapp-app2.discoveringthecloud.com
 
 480 x 300 image size
+
+
+codecommit+1-at-841726648246
+Ij7/BI8ddBhMz/LGUP4KbSiNxn/w+Hip18PRC2S+Ksk=
+
+      docker tag demoapp-frontend:latest 841726648246.dkr.ecr.us-west-2.amazonaws.com/demoapp-frontend:latest
+      docker push 841726648246.dkr.ecr.us-west-2.amazonaws.com/demoapp-frontend:latest
+
+
+cluster certificate authority data:
+aws eks describe-cluster --region us-west-2 --name eksworkshop-eksctl --query cluster.certificateAuthority.data                                               
+"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1USXhNVEF4TlRjMU1sb1hEVEk1TVRJd09EQXhOVGMxTWxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTFJ2CjRZaXVqeEQ5eHcydTZmZlk0ZmQ2NHdNL2JYUUJjelV3MnZkU2o2ZjM3cFdyWVh5UWkxNWhkTjRZdWZEemdiN3QKZWFNUGxhek5TdzFHY3N6aVVNbnRwODJONVp3Ujd6VmNna0s4aXVKRUdHQmZGS2hOSktVenRwenJrU2NENEFCNgpYSURlaGduMHIrcDRhOGZyMWpPUUhLdjFBWlp1WkQybWZPTDA0UjFoK0lDRW0vd29zVFJQVlUrc25XQ2ozS2JXCjI2YmZSZG5RY2kyeWJJdERmZGpVZnJGcVVyV3lDWEFXTHJNL2JsTlZEOFVuZWY5OGlyekRxN2lqV0RnN0NiNlkKOFA3aTVUTXpQdXBwR29UK2RHQTJtanpORDJHT05xdVpWWm91NFc0b1JqenU2L3FkN09zLzlmMlN0ZFN0WnNqRApXNWRLRjdEdUkxekRaVzNpMFM4Q0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFEcEJRcFVjcUI1MVIvMnI1d1BvanVOTVpzSEQKTmQwanNwN0NVTnRuSW5TUFJXazFKYWI4SWJ3UE50SG9XUUJ2dit0Z3BxR0REZk5OYnR3am14QkFaVTErWjdVVgpRQ3VLS3UvTTdWZlo5VjZveC91aXNTejF3ajZNdXp4SDAvUERIZUNuSEE1a2dpVUUyaGMxSktFblQ2eEpsdEJLClJyOS9PVHBXVDRLR0pENkl2a3NUdVM4WE9xMUJHRlNiamtCU0QrZjFjUzRaTkJkcXN6OTZ5SUQxdDRjN1lPeHkKSHhqUmlnNVZReXFMamsybmNXaG9UTlA0YUQ2ODFkdWFDNFNNbCtjNDM4NjNzamNoK205U0ZDNzEzTXZFdzd5cworNFNpZjFOd096dW9sY2pmL3N0emxNL1FDV2dWbjNqazNzYUU0dFpIV0hzWWdmQWhOTGR1RlJ4SEZNaz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+
+
+cluster host address:
+aws eks describe-cluster --region us-west-2 --name $CLUSTERNAME --query cluster.endpoint                                                                      
+"https://110E030FF2A414188BDA9A73385F65A5.gr7.us-west-2.eks.amazonaws.com"
+
+token:
+kubectl get secret default-token-rqjv4 -nprod -o json | jq -r '.data["token"]' | base64 -d                                                                    
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJwcm9kIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tcnFqdjQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjMwNjAwYmE0LTFiZDYtMTFlYS1hZTJlLTA2OWY5OWYzODJhOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpwcm9kOmRlZmF1bHQifQ.Imxvg77eMz4j8mxMZd1u1aWdoKzMYwWuQESzYjzx1TxbSZClmlhwVxGb1OyG7v8t43bLl-rAC8CarXzZa0CpZZF4JH1b76B0j7ngo10qppu4928R5JoyUqzi6eynt4xZo7k4l7gbwlceypgUOXzhPMlvq5mO3lHgvgb9Uly2jMh0ISWPqu6HTOULQ6_7kdVZxhCz67rKqODun-Mj9AeUEe9wxqiecDDktTkipecyyXWo6uO8NeIK7_tHarxteRzJPBNqqEGETxt9BDYtPBhvU5hL_eIGA0SkKC1pWRj_loTJhVD9A6w6pgFO2QVSl9D0BUrDI-G4BwJotMF72HOpUA
+
+
+
+Admin:~/.kube $ cat config 
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1USXhNVEF4TlRjMU1sb1hEVEk1TVRJd09EQXhOVGMxTWxvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTFJ2CjRZaXVqeEQ5eHcydTZmZlk0ZmQ2NHdNL2JYUUJjelV3MnZkU2o2ZjM3cFdyWVh5UWkxNWhkTjRZdWZEemdiN3QKZWFNUGxhek5TdzFHY3N6aVVNbnRwODJONVp3Ujd6VmNna0s4aXVKRUdHQmZGS2hOSktVenRwenJrU2NENEFCNgpYSURlaGduMHIrcDRhOGZyMWpPUUhLdjFBWlp1WkQybWZPTDA0UjFoK0lDRW0vd29zVFJQVlUrc25XQ2ozS2JXCjI2YmZSZG5RY2kyeWJJdERmZGpVZnJGcVVyV3lDWEFXTHJNL2JsTlZEOFVuZWY5OGlyekRxN2lqV0RnN0NiNlkKOFA3aTVUTXpQdXBwR29UK2RHQTJtanpORDJHT05xdVpWWm91NFc0b1JqenU2L3FkN09zLzlmMlN0ZFN0WnNqRApXNWRLRjdEdUkxekRaVzNpMFM4Q0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFEcEJRcFVjcUI1MVIvMnI1d1BvanVOTVpzSEQKTmQwanNwN0NVTnRuSW5TUFJXazFKYWI4SWJ3UE50SG9XUUJ2dit0Z3BxR0REZk5OYnR3am14QkFaVTErWjdVVgpRQ3VLS3UvTTdWZlo5VjZveC91aXNTejF3ajZNdXp4SDAvUERIZUNuSEE1a2dpVUUyaGMxSktFblQ2eEpsdEJLClJyOS9PVHBXVDRLR0pENkl2a3NUdVM4WE9xMUJHRlNiamtCU0QrZjFjUzRaTkJkcXN6OTZ5SUQxdDRjN1lPeHkKSHhqUmlnNVZReXFMamsybmNXaG9UTlA0YUQ2ODFkdWFDNFNNbCtjNDM4NjNzamNoK205U0ZDNzEzTXZFdzd5cworNFNpZjFOd096dW9sY2pmL3N0emxNL1FDV2dWbjNqazNzYUU0dFpIV0hzWWdmQWhOTGR1RlJ4SEZNaz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    server: https://110E030FF2A414188BDA9A73385F65A5.gr7.us-west-2.eks.amazonaws.com
+  name: eksworkshop-eksctl.us-west-2.eksctl.io
+contexts:
+- context:
+    cluster: eksworkshop-eksctl.us-west-2.eksctl.io
+    user: i-017a224e11cdfccf8@eksworkshop-eksctl.us-west-2.eksctl.io
+  name: i-017a224e11cdfccf8@eksworkshop-eksctl.us-west-2.eksctl.io
+current-context: i-017a224e11cdfccf8@eksworkshop-eksctl.us-west-2.eksctl.io
+kind: Config
+preferences: {}
+users:
+- name: i-017a224e11cdfccf8@eksworkshop-eksctl.us-west-2.eksctl.io
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      args:
+      - eks
+      - get-token
+      - --cluster-name
+      - eksworkshop-eksctl
+      - --region
+      - us-west-2
+      command: aws
+      env: null

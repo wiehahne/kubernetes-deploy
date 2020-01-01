@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: "demoapp-frontend"
-  namespace: "prod"
+  namespace: "default"
 spec:
   replicas: 3
   template:
