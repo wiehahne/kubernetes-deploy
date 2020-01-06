@@ -15,6 +15,10 @@ spec:
   rules:
     - http:
         paths:
+          - path: /*
+            backend:
+              serviceName: "ssl-redirect"
+              servicePort: use-annotation
           - path: /summer
             backend:
               serviceName: "demoapp-app1-summer"
