@@ -6,6 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:841726648246:certificate/835bee94-b2d4-471d-af94-89d4d8e67b53
   labels:
     app: demoapp
 spec:
