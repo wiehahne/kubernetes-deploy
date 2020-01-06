@@ -11,8 +11,7 @@ metadata:
     app: demoapp
 spec:
   rules:
-    - host: discoveringthecloud.com
-      http:
+    - http:
         paths:
           - path: /summer
             backend:
