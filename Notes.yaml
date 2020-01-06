@@ -179,6 +179,15 @@ token:
 kubectl get secret default-token-rqjv4 -nprod -o json | jq -r '.data["token"]' | base64 -d                                                                    
 eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJwcm9kIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tcnFqdjQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjMwNjAwYmE0LTFiZDYtMTFlYS1hZTJlLTA2OWY5OWYzODJhOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpwcm9kOmRlZmF1bHQifQ.Imxvg77eMz4j8mxMZd1u1aWdoKzMYwWuQESzYjzx1TxbSZClmlhwVxGb1OyG7v8t43bLl-rAC8CarXzZa0CpZZF4JH1b76B0j7ngo10qppu4928R5JoyUqzi6eynt4xZo7k4l7gbwlceypgUOXzhPMlvq5mO3lHgvgb9Uly2jMh0ISWPqu6HTOULQ6_7kdVZxhCz67rKqODun-Mj9AeUEe9wxqiecDDktTkipecyyXWo6uO8NeIK7_tHarxteRzJPBNqqEGETxt9BDYtPBhvU5hL_eIGA0SkKC1pWRj_loTJhVD9A6w6pgFO2QVSl9D0BUrDI-G4BwJotMF72HOpUA
 
+User:
+i-017a224e11cdfccf8@eksworkshop-eksctl.us-west-2.eksctl.io
+
+
+Clustername:
+eksworkshop-eksctl
+or
+eksworkshop-eksctl.us-west-2.eksctl.io
+
 
 
 Admin:~/.kube $ cat config 
@@ -210,3 +219,285 @@ users:
       - us-west-2
       command: aws
       env: null
+
+
+
+
+sed -i -e "s#\$EKS_CA#$(aws eks describe-cluster --name eksworkshop-eksctl --query cluster.certificateAuthority.data --output text)#g" ./config
+sed -i -e "s#\$EKS_CLUSTER_HOST#$(aws eks describe-cluster --name eksworkshop-eksctl --query cluster.endpoint --output text)#g" ./config
+sed -i -e "s#\$EKS_CLUSTER_NAME#eksworkshop-eksctl#g" ./config
+sed -i -e "s#\$EKS_CLUSTER_USER_NAME#lambda#g" ./config
+
+
+
+EKSLambdaTest-role-ao9fsxe1
+
+
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: lambda-access
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+
+
+
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: lambda-user-role-binding
+  namespace: default
+
+subjects:
+- kind: User
+  name: lambda
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: lambda-access
+  apiGroup: rbac.authorization.k8s.io
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import base64
+import boto3
+import string
+import random
+from botocore.signers import RequestSigner
+
+class EKSAuth(object):
+
+    METHOD = 'GET'
+    EXPIRES = 60
+    EKS_HEADER = 'x-k8s-aws-id'
+    EKS_PREFIX = 'k8s-aws-v1.'
+    STS_URL = 'sts.amazonaws.com'
+    STS_ACTION = 'Action=GetCallerIdentity&Version=2011-06-15'
+
+    def __init__(self, cluster_id, region='us-east-1'):
+        self.cluster_id = cluster_id
+        self.region = region
+    
+    def get_token(self):
+        """
+        Return bearer token
+        """
+        session = boto3.session.Session()
+        #Get ServiceID required by class RequestSigner
+        client = session.client("sts",region_name=self.region)
+        service_id = client.meta.service_model.service_id
+
+        signer = RequestSigner(
+            service_id,
+            session.region_name,
+            'sts',
+            'v4',
+            session.get_credentials(),
+            session.events
+        )
+
+        params = {
+            'method': self.METHOD,
+            'url': 'https://' + self.STS_URL + '/?' + self.STS_ACTION,
+            'body': {},
+            'headers': {
+                self.EKS_HEADER: self.cluster_id
+            },
+            'context': {}
+        }
+
+        signed_url = signer.generate_presigned_url(
+            params,
+            region_name=session.region_name,
+            expires_in=self.EXPIRES,
+            operation_name=''
+        )
+
+        return (
+            self.EKS_PREFIX +
+            base64.urlsafe_b64encode(
+                signed_url.encode('utf-8')
+            ).decode('utf-8')
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+import os.path
+import yaml
+import boto3
+from kubernetes import client, config
+from eksauth import auth
+# Configure your cluster name and region here
+KUBE_FILEPATH = '/tmp/kubeconfig'
+CLUSTER_NAME = 'EKS'
+REGION = 'us-east-1'
+
+# We assume that when the Lambda container is reused, a kubeconfig file exists.
+# If it does not exist, it creates the file.
+
+if not os.path.exists(KUBE_FILEPATH):
+    
+    kube_content = dict()
+    # Get data from EKS API
+    eks_api = boto3.client('eks',region_name=REGION)
+    cluster_info = eks_api.describe_cluster(name=CLUSTER_NAME)
+    certificate = cluster_info['cluster']['certificateAuthority']['data']
+    endpoint = cluster_info['cluster']['endpoint']
+
+    # Generating kubeconfig
+    kube_content = dict()
+    
+    kube_content['apiVersion'] = 'v1'
+    kube_content['clusters'] = [
+        {
+        'cluster':
+            {
+            'server': endpoint,
+            'certificate-authority-data': certificate
+            },
+        'name':'kubernetes'
+                
+        }]
+
+    kube_content['contexts'] = [
+        {
+        'context':
+            {
+            'cluster':'kubernetes',
+            'user':'aws'
+            },
+        'name':'aws'
+        }]
+
+    kube_content['current-context'] = 'aws'
+    kube_content['Kind'] = 'config'
+    kube_content['users'] = [
+    {
+    'name':'aws',
+    'user':'lambda'
+    }]
+
+
+    # Write kubeconfig
+    with open(KUBE_FILEPATH, 'w') as outfile:
+        yaml.dump(kube_content, outfile, default_flow_style=False)
+
+def handler(event, context):
+
+    # Get Token
+    eks = auth.EKSAuth(CLUSTER_NAME)
+    token = eks.get_token()
+    # Configure
+    config.load_kube_config(KUBE_FILEPATH)
+    configuration = client.Configuration()
+    configuration.api_key['authorization'] = token
+    configuration.api_key_prefix['authorization'] = 'Bearer'
+    # API
+    api = client.ApiClient(configuration)
+    v1 = client.CoreV1Api(api)
+    
+    # Get all the pods
+    ret = v1.list_namespaced_pod("default")
+
+    for i in ret.items:
+        print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+
+
+
+
+
+/lib/python3.6/dist-packages
+
+zip -r9 ~/environment/travelapp/KubernetesLambda.zip main.py
+zip -r9 ~/environment/travelapp/KubernetesLambda.zip auth.py
+
+cd $VIRTUAL_ENV/lib/python3.6/site-packages
+zip -r9 ~/environment/travelapp/KubernetesLambda.zip .
+
+
+'user: [ 'lambda' ]
+
+sts.us-west-2.amazonaws.com’.format(self.region)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+vim kubernetes-admin_user
+# [...]
+users:
+- name: kubernetes-admin
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      command: aws-iam-authenticator
+      args:
+        - "token"
+        - "-i"
+        - "CLUSTER_ID"
+        - "-r"
+        - "ROLE_ARN"
+  # no client certificate/key needed here!
+
+
+vim kubernetes-admin_configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    # statically map arn:aws:iam::000000000000:role/KubernetesAdmin to cluster admin
+    - roleARN: arn:aws:iam::841726648246:role/EKSLambdaTest-role-ao9fsxe1
+      username: kubernetes-admin
+      groups:
+      - system:masters
+# [... for worker node authentication]
+
+
+
+841726648246-aws-eks-codesuite
+arn:aws:s3:::841726648246-aws-eks-codesuite
